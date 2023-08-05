@@ -55,13 +55,13 @@ body {
 }
 
 #vertical {
-    border-color: #4433ff;
-    background: #4433ff77;
+    border-color: #8c87bd;
+    background: #4e497578;
 }
 
 #horizontal {
-    border-color: #ff5577;
-    background: #ff557777;
+    border-color: #c1a1a7;
+    background: #4f2f3678;
 }
 
 /*.active span, span.active {
@@ -84,7 +84,7 @@ body {
 }
 
 .whitespace {
-    width: 4px;
+    width: 9.5px;
 }
 
 .clean .whitespace {
@@ -119,4 +119,20 @@ body {
 
 .text-container {
     width: 400px;
+    margin-left: 100px;
+    font-family: 'Jetbrains Mono';
+    text-transform: uppercase;
+}
+
+.char {
+    transition: 1s;    
+    margin: 0;
+    outline: 1px solid transparent;
+    padding: 0;
+}
+
+.clean .char {
+    margin: 0 2px;
+    outline-color: #aa9944;
+    padding: 1px 5px;
 }
