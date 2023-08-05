@@ -1,0 +1,122 @@
+:root {
+    --font-size: 14px;
+    --letter-width: 20px;
+    --border-col: #aaaadd88;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    color: white;
+    background: #1d1d1d;
+    overflow: scroll;
+    position: relative;
+    padding: 40px;
+}
+
+.row {
+    display: flex;
+}
+
+.table-letter {
+    position: relative;
+    font-family: 'Jetbrains Mono', monospace;
+    width: var(--letter-width); height: var(--letter-width);
+    font-size: var(--font-size);
+    line-height: var(--letter-width);
+    border: 1px solid transparent;
+    text-align: center;
+    margin: 2px;
+    font-weight: 200;
+    animation: linear 6s popin;
+    animation-delay: calc(var(--char-index) * 0.005s);
+    animation-fill-mode: both;
+    transform: scale(0);
+    transition: 1s ease-in-out;
+}
+
+.table-letter-head {
+    font-weight: bold;
+    color: #d4d88b;
+}
+
+.empty {
+    visibility: hidden;
+}
+
+.handle {
+    border: 1px solid;
+    position: absolute;
+    z-index: -1;
+    transition: 1s ease-in-out;
+}
+
+#vertical {
+    border-color: #4433ff;
+    background: #4433ff77;
+}
+
+#horizontal {
+    border-color: #ff5577;
+    background: #ff557777;
+}
+
+/*.active span, span.active {
+    background: #38494d;
+}*/
+
+.target {
+    background: #8a5c33 !important;
+    border-color: orange !important;
+}
+
+.shrunk {
+    width: 0px !important;
+    height: 0px !important;
+}
+
+.whitespace, .word * {
+    display: inline-block;
+    transition: 1s;
+}
+
+.whitespace {
+    width: 4px;
+}
+
+.clean .whitespace {
+    width: 0px;
+}
+
+@keyframes popin {
+    0% {
+        border-color: transparent;
+    }
+    20% {
+        transform: scale(1);
+        border-color: transparent;
+    }
+    40% {
+        border-color: var(--border-col);
+        transform: scale(1);
+    }
+    80% {
+        border-color: var(--border-col);
+        transform: scale(1);
+    }
+    90% {
+        border-color: white;
+        transform: scale(1);
+    }
+    100% {
+        border-color: var(--border-col);
+        transform: scale(1);
+    }
+}
+
+.text-container {
+    width: 400px;
+}
