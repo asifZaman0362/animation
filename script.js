@@ -87,10 +87,6 @@ function createHandles() {
 
 function scrollVerticalTo(col) {
   document.querySelector('.target')?.classList.remove('target');
-  for (let i = 0; i < active_cols.length; i++) {
-    active_cols[i].classList.remove('active');
-  }
-  active_cols = [];
   const handleVert = document.querySelector('#vertical');
   let head = document.querySelector('#col' + col);
   let rect = head.getBoundingClientRect();
@@ -98,19 +94,14 @@ function scrollVerticalTo(col) {
   handleVert.style.left = rect.left - 3 + "px";
   handleVert.style.top = top;
   handleVert.classList.remove('hidden');
-  for (let i = 0; i < rows.length; i++) {
-    rows[i].children[col + 1].classList.add('active');
-    active_cols.push(rows[i].children[col + 1]);
-  }
   active_x = col;
-  if (active_y && active_x) {
+  if (active_y != undefined && active_x != undefined) {
     document.querySelector('#row' + active_y).children[active_x + 1].classList.add('target');
   }
 }
 
 function scrollHorizontalTo(row) {
   document.querySelector('.target')?.classList.remove('target');
-  document.querySelector('.row.active')?.classList.remove('active');
   const handleHorizontal = document.querySelector('#horizontal');
   let head = document.querySelector('#row' + row);
   let rect = head.getBoundingClientRect();
@@ -119,7 +110,7 @@ function scrollHorizontalTo(row) {
   handleHorizontal.classList.remove('hidden');
   head.classList.add('active');
   active_y = row;
-  if (active_y && active_x) {
+  if (active_y != undefined && active_x != undefined) {
     document.querySelector('#row' + active_y).children[active_x + 1].classList.add('target');
   }
 }
@@ -130,8 +121,64 @@ function showHandles() {
 }
 
 function splitAndClean(target) {
+  target.setAttribute('data-splitting', '');
   Splitting();
   setTimeout(() => target.classList.add('clean'), 1000);
+}
+
+function typewriter(parent, text, after) {
+  for (let x = 0; x < text.length; x++) {
+    setTimeout(() => parent.innerHTML += text.charAt(x), (x + 1) * 200);
+  }
+  setTimeout(after, text.length * 200 + 100);
+}
+
+function expandKey(plaintext, key, keystring) {
+  let diff = plaintext.length - keystring.length;
+  let keyphrase = keystring;
+  for (let x = 0; x < diff; x++) {
+    key.appendChild(createElement('span', ['char'], keystring.charAt(x % keystring.length), ''));
+    keyphrase += keystring.charAt(x % keystring.length);
+  }
+  return keyphrase;
+}
+
+function encrypt(plaintextelement, key, plaintext, keyphrase) {
+  let p = [], k = [];
+  let ciphertextContainer = createElement('span', ['text-row'], '', '');
+  document.querySelector('.text-container').appendChild(ciphertextContainer);
+  ciphertextContainer.appendChild(createElement('pre', ['label'], 'ciphertext:', ''));
+  let ciphertext = createElement('span', '', '', '');
+  ciphertextContainer.appendChild(ciphertext);
+  plaintextelement = plaintextelement.querySelectorAll('.char');
+  key = key.querySelectorAll('.char');
+  for (let x = 0; x < plaintextelement.length; x++) {
+    let y = plaintextelement[x];
+    if (y.classList.contains('space')) continue;
+    else p.push(y);
+  }
+  console.debug(p);
+  for (let x = 0; x < key.length; x++) {
+    let y = key[x];
+    if (y.classList.contains('space')) continue;
+    else k.push(y);
+  }
+  for (let x = 0; x < plaintext.length; x++) {
+    setTimeout(() => {
+      if (x > 0) {
+        p[x - 1].classList.remove('selected');
+        k[x - 1].classList.remove('selected');
+      }
+      p[x].classList.add('selected');
+      k[x].classList.add('selected');
+      console.log(plaintext.toUpperCase().charCodeAt(x) - 65);
+      console.log(keyphrase.toUpperCase().charCodeAt(x) - 65);
+      scrollHorizontalTo(plaintext.toUpperCase().charCodeAt(x) - 65);
+      scrollVerticalTo(keyphrase.toUpperCase().charCodeAt(x) - 65);
+      ciphertext.innerHTML += document.querySelector('.target').innerHTML;
+    }, (x + 1) * 1500);
+  }
+  setTimeout(() => splitAndClean(ciphertext), (plaintext.length + 0.5) * 1500);
 }
 
 function init() {
@@ -141,14 +188,25 @@ function init() {
   setTimeout(showHandles, 6500);
   let textContainer = createElement('div', ['text-container'], '', '');
   document.body.appendChild(textContainer);
-  let text = createElement('span', ['plaintext'], '', '');
-  text.setAttribute('data-splitting', '');
-  textContainer.appendChild(text);
-  const _text = "Some random text";
-  for (let x = 0; x < _text.length; x++) {
-    setTimeout(() => text.innerHTML += _text.charAt(x), (x + 1) * 200);
-  }
-  setTimeout(() => splitAndClean(text), _text.length * 200 + 200);
+  let plaintextContainer = createElement('div', ['text-row'], '', '');
+  let plaintext = createElement('span', ['plaintext'], '', '');
+  plaintextContainer.appendChild(createElement('pre', ['label'], ' plaintext:', ''));
+  plaintextContainer.appendChild(plaintext);
+  textContainer.appendChild(plaintextContainer);
+  let keyContainer = createElement('div', ['text-row'], '', '');
+  let key = createElement('span', ['key'], '', '');
+  keyContainer.appendChild(createElement('pre', ['label'], '       key:', ''));
+  keyContainer.appendChild(key);
+  textContainer.appendChild(keyContainer);
+  typewriter(plaintext, 'some random text',
+    () => {
+      splitAndClean(plaintext);
+      typewriter(key, 'roderik', () => splitAndClean(key));
+    });
+  let fullkey = '';
+  setTimeout(() => fullkey = 
+    expandKey('somerandomtext', key, 'roderik'), 10000);
+  setTimeout(() => encrypt(plaintext, key, 'somerandomtext', fullkey), 12500);
 }
 
 init();

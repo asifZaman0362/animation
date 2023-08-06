@@ -14,7 +14,7 @@ body {
     background: #1d1d1d;
     overflow: scroll;
     position: relative;
-    padding: 40px;
+    padding: 30px;
 }
 
 .row {
@@ -118,10 +118,14 @@ body {
 }
 
 .text-container {
-    width: 400px;
+    width: 550px;
     margin-left: 100px;
     font-family: 'Jetbrains Mono';
     text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    transition: 1s;
 }
 
 .char {
@@ -133,6 +137,31 @@ body {
 
 .clean .char {
     margin: 0 2px;
-    outline-color: #aa9944;
     padding: 1px 5px;
+    animation: linear 1s blink;
+    animation-delay: calc(var(--char-index) * 0.1s);
+}
+
+.selected {
+    outline-color: #aa9944;
+}
+
+.label {
+    font-size: 12px;
+    margin-right: 10px;
+    font-weight: lighter;
+    font-style: italic;
+    display: inline-block;
+}
+
+@keyframes blink {
+    0% {
+        outline-color: transparent;
+    }
+    50% {
+        outline-color: #aa9944;
+    }
+    100% {
+        outline-color: transparent;
+    }
 }
