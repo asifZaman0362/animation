@@ -11,7 +11,7 @@ body {
     justify-content: center;
     flex-direction: row;
     color: white;
-    background: #1d1d1d;
+    background: black;
     overflow: scroll;
     position: relative;
     padding: 30px;

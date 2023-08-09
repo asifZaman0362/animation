@@ -1,0 +1,77 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: black;
+    color: white;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+    font-family: 'Iosevka Nerd Font';
+}
+
+graph {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 10px;
+    height: 600px;
+    width: 1000px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: end;
+    column-gap: 10px;
+    padding: 0 20px;
+}
+
+.label, .bar {
+    width: 20px;
+    display: block;
+    text-align: center;
+}
+
+.bar {
+    background: cyan;
+    min-height: 5px;
+    transition: 1s ease-in-out;
+}
+
+#bar_row {
+    height: 400px;
+    border-bottom: 2px solid white;
+}
+
+.label {
+    text-transform: uppercase;
+}
+
+.value-label {
+    font-size: 8px;
+    position: relative;
+    top: -20px;
+}
+
+.label {
+    --color: white;
+    animation: 1s fade-in ease-in-out forwards;
+    animation-delay: calc(var(--index) * 50ms);
+    color: transparent;
+    scale: 0;
+}
+
+@keyframes fade-in {
+    from {
+        color: transparent;
+        scale: 0;
+    }
+    to {
+        color: var(--color);
+        scale: 1;
+    }
+}
